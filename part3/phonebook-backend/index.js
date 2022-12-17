@@ -52,31 +52,30 @@ app.delete("/api/persons/:id", (request, response) => {
     response.status(204).end();
 });
 
-// const generateId = () => {
-//     const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-//     return maxId + 1;
-// };
+const generateId = () => {
+    const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
+    return maxId + 1;
+};
 
-// app.post("/api/persons", (request, response) => {
-//     const body = request.body;
+app.post("/api/persons", (request, response) => {
+    const body = request.body;
+    console.log(body);
+    // if (!body.content) {
+    //     return response.status(400).json({
+    //         error: "content missing",
+    //     });
+    // }
 
-//     if (!body.content) {
-//         return response.status(400).json({
-//             error: "content missing",
-//         });
-//     }
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    };
 
-//     const person = {
-//         content: body.content,
-//         important: body.important || false,
-//         date: new Date(),
-//         id: generateId(),
-//     };
+    persons = persons.concat(person);
 
-//     persons = persons.concat(person);
-
-//     response.json(person);
-// });
+    response.json(person);
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
