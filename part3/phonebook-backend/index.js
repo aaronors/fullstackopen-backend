@@ -34,20 +34,20 @@ app.get("/api/persons", (request, response) => {
     response.json(persons);
 });
 
-// app.get("/api/persons/:id", (request, response) => {
-//     const id = Number(request.params.id);
-//     const note = persons.find((note) => note.id === id);
+app.get("/api/persons/:id", (request, response) => {
+    const id = Number(request.params.id);
+    const person = persons.find((person) => person.id === id);
 
-//     if (note) {
-//         response.json(note);
-//     } else {
-//         response.status(404).end();
-//     }
-// });
+    if (person) {
+        response.json(person);
+    } else {
+        response.status(404).end();
+    }
+});
 
 // app.delete("/api/persons/:id", (request, response) => {
 //     const id = Number(request.params.id);
-//     persons = persons.filter((note) => note.id !== id);
+//     persons = persons.filter((person) => person.id !== id);
 
 //     response.status(204).end();
 // });
@@ -66,16 +66,16 @@ app.get("/api/persons", (request, response) => {
 //         });
 //     }
 
-//     const note = {
+//     const person = {
 //         content: body.content,
 //         important: body.important || false,
 //         date: new Date(),
 //         id: generateId(),
 //     };
 
-//     persons = persons.concat(note);
+//     persons = persons.concat(person);
 
-//     response.json(note);
+//     response.json(person);
 // });
 
 const PORT = 3001;
