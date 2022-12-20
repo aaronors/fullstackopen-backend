@@ -21,11 +21,13 @@ app.use(morgan("tiny"));
 app.use(express.static("build"));
 
 app.get("/info", (request, response) => {
-    response.send(
-        `<div>Phonebook has info for ${
-            persons.length
-        } people</div><div>${new Date()}</div>`
-    );
+    Person.find({}).then((persons) => {
+        response.send(
+            `<div>Phonebook has info for ${
+                persons.length
+            } people</div><div>${new Date()}</div>`
+        );
+    });
 });
 
 app.get("/api/persons", (request, response) => {
@@ -34,7 +36,7 @@ app.get("/api/persons", (request, response) => {
     });
 });
 
-app.get("/api/persons/:id", (request, response, next) => { // add next
+app.get("/api/persons/:id", (request, response, next) => {
     Person.findById(request.params.id)
         .then((person) => {
             if (person) {
