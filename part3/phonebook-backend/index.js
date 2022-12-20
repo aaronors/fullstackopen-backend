@@ -32,42 +32,31 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-    const id = Number(request.params.id);
-    persons = persons.filter((person) => person.id !== id);
-
-    response.status(204).end();
+    Person.findByIdAndRemove(request.params.id)
+        .then((result) => {
+            response.status(204).end();
+        })
+        .catch((error) => next(error));    
 });
 
-const generateId = () => {
-    const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-    return maxId + 1;
-};
-
-app.post("/api/persons", (request, response) => {
-    const body = request.body;
-    console.log(body);
-
-
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+  
     if (!body.name || !body.number) {
         return response.status(400).json({
             error: "name or number is missing"
         });
-    } else if(persons.find((person) => person.name.localeCompare(body.name, undefined, { sensitivity: 'accent' }) === 0)){
-        return response.status(400).json({
-            error: "name must be unique"
-        });
     }
-
-    const person = {
+  
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId()
-    };
-
-    persons = persons.concat(person);
-
-    response.json(person);
-});
+    })
+  
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    })
+  })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
