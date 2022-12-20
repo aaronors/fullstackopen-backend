@@ -19,7 +19,27 @@ const personSchema = new mongoose.Schema({
         minLength: 3,
         required: true
     },
-    number: String,
+    number:{
+        type: String,
+        minLength: 8,
+        validate: {
+            validator: (number) => {
+                const parts = number.split("-");
+
+                console.log("-- 0");
+                if(parts.length > 2) return false;
+                console.log("-- 1");
+                if(parts[0].length < 2 || parts[0].length > 3) return false;
+                console.log("-- 2");
+                if(isNaN(parts[0]) || isNaN(parts[1])) return false;
+                console.log("-- 3");
+
+                return true;
+            },
+            message: "If number contains '-' the first part must be of length two or three and the second part must contain numbers"
+        },
+        required: true
+    }
 });
 
 personSchema.set("toJSON", {
